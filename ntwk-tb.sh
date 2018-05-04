@@ -5,6 +5,24 @@ HOSTNAME=`cat /etc/hostname`
 IP_ADDRESS=`ip a | sed -rn '/: '"$INF"':.*state UP/{N;N;s/.*inet (\S*).*/\1/p}'`
 DNS_SERVERS=`grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' /etc/resolv.conf | head -1`
 
+#CDP
+#sudo tcpdump -nn -v -i enp6s0 -s 1500 -c 1 'ether[20:2] == 0x2000' > cdp_output
+
+#Switch HOSTNAME
+#cat cdp | grep -i "Device-ID" | cut -d ' ' -f7
+
+#PORT ID
+#cat cdp_output | grep -i Port-ID | cut -d ' ' -f7
+
+#Switch model
+#cat cdp | grep -i Platform | cut -d ' ' -f8
+
+#IOS_VERSION_PART_1
+#cat cdp | grep -i "Cisco IOS Software," | cut -d ' ' -f8
+
+#IOS_VERSION_PART_2
+#cat cdp | grep -i "Cisco IOS Software," | cut -d ' ' -f10
+
 while true; do
     if ip a | sed -rn '/: '"$INF"':.*state UP/{N;N;s/.*inet (\S*).*/\1/p}' &> /dev/null ; then
         echo "Network Connection detected - Performing Network tests"
