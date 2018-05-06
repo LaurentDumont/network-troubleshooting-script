@@ -25,7 +25,7 @@ while true; do
             SWITCH_MODEL=`grep -i Platform /tmp/cdp_output | cut -d ' ' -f8`
             IOS_VERSION_PART_1=`grep -i "Cisco IOS Software," /tmp/cdp_output | cut -d ' ' -f8`
             IOS_VERSION_PART_2=`grep -i "Cisco IOS Software," /tmp/cdp_output | cut -d ' ' -f10`
-            curl -X POST -H 'Content-type: application/json' --data '{"text":"Network Connection detected on '"$HOSTNAME"'\nYour IP is '"$IP_ADDRESS"'\nYour DNS Server is '"$DNS_SERVERS"' \n Your DHCP lease time is '"$DHCP_LEASE_TIME_MINUTES"' minutes\n The DHCP Server is '"$DHCP_SERVER_IP"'\nYour switch is '"$SWITCH_HOSTNAME"'\nThe switchport is '"$SWITCHPORT_ID"'\nThe switch model is '"$SWITCH_MODEL"'\nThe switch IOS Version is '"$IOS_VERSION_PART_1 -"''"$IOS_VERSION_PART_2"'"}' \
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"Network Connection detected on '"$HOSTNAME"'\nYour IP is '"$IP_ADDRESS"'\nYour DNS Server is '"$DNS_SERVERS"' \nYour DHCP lease time is '"$DHCP_LEASE_TIME_MINUTES"' minutes\nThe DHCP Server is '"$DHCP_SERVER_IP"'\nYour switch is '"$SWITCH_HOSTNAME"'\nThe switchport is '"$SWITCHPORT_ID"'\nThe switch model is '"$SWITCH_MODEL"'\nThe switch IOS Version is '"$IOS_VERSION_PART_1 -"''"$IOS_VERSION_PART_2"'"}' \
             $WEBHOOK_TOKEN
         sleep 5
         else
