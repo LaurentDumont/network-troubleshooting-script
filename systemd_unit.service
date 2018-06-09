@@ -1,0 +1,11 @@
+[Unit]
+Description=Control the network Troubleshooting utility.
+
+[Service]
+Type=simple
+ExecStart=/PATH_TO_SCRIPT_FILE/ntwk-tb.sh
+PIDFile=/PATH_TO_SCRIPT_FILE//ntwk-tb.pid 
+User=root
+
+[Install]
+WantedBy=multi-user.target
