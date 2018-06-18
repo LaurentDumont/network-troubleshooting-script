@@ -1,22 +1,22 @@
 #!/bin/bash
 
 #Script variables. Change $INF to appropriate interface if needed.
-INF=enp6s0
+INF=eth0
 HOSTNAME=`cat /etc/hostname`
 IP_ADDRESS=`ip a | sed -rn '/: '"$INF"':.*state UP/{N;N;s/.*inet (\S*).*/\1/p}'`
 DNS_SERVERS=`grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' /etc/resolv.conf | head -1`
 
 #Source discord/slack token
-source ./token_file
+source /root/network-troubleshooting-script/token_file
 echo $WEBHOOK_TOKEN
 
 while true; do
     if ip a | sed -rn '/: '"$INF"':.*state UP/{N;N;s/.*inet (\S*).*/\1/p}' &> /dev/null ; then
         echo "Network Connection detected - Performing Network tests"
 
-        DHCP_LEASE_TIME=`tail -n 500 /var/log/syslog | grep -i "lease time" | cut -d : -f5 | cut -d ' ' -f6 | sed '$!d'`
+        DHCP_LEASE_TIME=`strings /var/log/syslog | grep -i "leased" | tail -1 | cut -d ':' -f5 | cut -d ' ' -f5`
         DHCP_LEASE_TIME_MINUTES=`expr $DHCP_LEASE_TIME / 60`
-        DHCP_SERVER_IP=`tail -n 500 /var/log/syslog | grep -i "server identifier" | cut -d : -f5  | cut -d ' ' -f6 | sed '$!d'`
+        DHCP_SERVER_IP=`strings /var/log/syslog | grep -i offered | tail -1 | cut -d ':' -f5 | cut -d ' ' -f5`
 
         if ping -c 2 8.8.8.8 &> /dev/null && ping -c 2 8.8.4.4 &> /dev/null ; then
             tcpdump -nn -v -i $INF -s 1500 -c 1 'ether[20:2] == 0x2000' > /tmp/cdp_output
